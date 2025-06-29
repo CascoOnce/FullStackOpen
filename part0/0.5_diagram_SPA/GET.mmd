@@ -1,0 +1,24 @@
+sequenceDiagram
+    %% Mostrar los numeros
+    autonumber
+    %% PARTICIPANTEs
+    participant B as browser
+    participant S as server
+    %% HTML
+    B->>+S: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    S-->>-B: HTML document
+    %% CSS
+    B->>+S: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    S-->>-B: CSS file
+    %% JS
+    B->>+S: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    S-->>-B: Javascript file
+
+    note over B: The browser starts executing the js code <br/> that fetches the JSON from the server
+
+    %% JSON
+    B->>+S: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    S-->>-B: [{ "content": "123456", "date": "2025-06-28T20:53:28.313Z"}, ...] 
+
+    Note over S: The browser executes the callback <br/> function that renders the notes.
+

@@ -1,0 +1,10 @@
+sequenceDiagram
+    %% Mostrar los numeros
+    autonumber
+    %% PARTICIPANTEs
+    participant B as browser
+    participant S as server
+    %% NOTA
+    B->>+S: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    S-->>-B: 201 Created {content: "Hi", date: "2025-06-29T18:17:18.282Z"}  (No Redirect)
+
