@@ -8,25 +8,34 @@ const Button = ({handleClick, text}) => {
   );
 }
 
-const StatisticsLine = ({text, value}) => <div> {text} {value} </div>
+const StatisticsLine = ({text, value}) => {
+  return (
+    <tr> 
+      <td> {text} </td>
+      <td> {value} </td>
+    </tr>
+  )
+}
 
 const Statistics = (props) => {
   if(props.total === 0) {
     return (
-      <div>
-        <div>No feedback given</div>
-      </div>
+      <tbody>
+        <tr>
+          <td> No feedback given </td>
+        </tr>
+      </tbody>
     )
   }
   return (
-    <div>
-      <StatisticsLine text = "good" value = {props.value} />
+    <tbody>
+      <StatisticsLine text = "good" value = {props.good} />
       <StatisticsLine text = "neutral" value = {props.neutral} />
       <StatisticsLine text = "bad" value = {props.bad} />
       <StatisticsLine text = "all" value = {props.total} />
       <StatisticsLine text = "average" value = {props.average} />
-      <StatisticsLine text = "positive" value = {props.positive} />
-    </div>
+      <StatisticsLine text = "positive" value = {`${props.positive} %`} />
+    </tbody>
   );
 }
 
@@ -48,12 +57,12 @@ const App = () => {
   const calculatePositive = (good, neutral, bad) => {
     const positives = good;
     const votes = good + neutral + bad;
-    return positives/votes;
+    return (positives/votes)*100;
   }
 
   const handleGoodClick = () => {
     const updatedGood = good + 1;
-    //console.log(updatedGood);
+    // console.log(updatedGood);
     setGood(updatedGood);
     setTotal(updatedGood + neutral + bad);
     setAverage(calculateAverage(updatedGood, neutral, bad));
@@ -62,7 +71,7 @@ const App = () => {
   
   const handleNeutralClick = () => {
     const updatedNeutral = neutral + 1;
-    console.log(updatedNeutral);
+    // console.log(updatedNeutral);
     setNeutral(updatedNeutral);
     setTotal(good + updatedNeutral + bad);
     setAverage(calculateAverage(good, updatedNeutral, bad));
@@ -71,7 +80,7 @@ const App = () => {
   
   const handleBadClick = () => {
     const updatedBad = bad + 1;
-    console.log(updatedBad);
+    // console.log(updatedBad);
     setBad(updatedBad);
     setTotal(good + neutral + updatedBad);
     setAverage(calculateAverage(good, neutral, updatedBad));
@@ -84,8 +93,16 @@ const App = () => {
       <Button handleClick = {handleGoodClick} text = {"good"} />
       <Button handleClick = {handleNeutralClick} text = {"neutral"} />
       <Button handleClick = {handleBadClick} text = {"bad"} />
-      <h1>Statistics</h1>
-      <Statistics  good = {good} neutral = {neutral} bad = {bad} total = {total} average = {average} positive = {positive} />
+      <table>
+        <thead>
+          <tr>
+            <td>
+              <h1>statistics</h1>
+            </td>
+          </tr>
+        </thead>
+        <Statistics  good = {good} neutral = {neutral} bad = {bad} total = {total} average = {average} positive = {positive} />
+      </table>
     </div>
   )
 }
