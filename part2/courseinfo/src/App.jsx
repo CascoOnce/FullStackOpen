@@ -37,6 +37,7 @@ const Total = (props) => {
   const parts = props.parts.parts;
   // console.log(parts);
   const sum = parts.reduce((sum, part) => {
+    // console.log(sum, part);
     return sum += part.exercises 
   }, 0);
   // console.log(sum);
