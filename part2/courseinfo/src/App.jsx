@@ -20,6 +20,7 @@ const Content = (props) => {
       <Part part={props.parts.parts[0].name} exercises={props.parts.parts[0].exercises} />
       <Part part={props.parts.parts[1].name} exercises={props.parts.parts[1].exercises} />
       <Part part={props.parts.parts[2].name} exercises={props.parts.parts[2].exercises} />
+      <Part part={props.parts.parts[3].name} exercises={props.parts.parts[3].exercises} />
     </div>
   );
 };
@@ -33,8 +34,18 @@ const Part = (props) => {
 };
 
 const Total = (props) => {
+  const parts = props.parts.parts;
+  // console.log(parts);
+  const sum = parts.reduce((sum, part) => {
+    return sum += part.exercises 
+  }, 0);
+  // console.log(sum);
   return (
-    <p>Numbre of exercises {props.parts.parts[0].exercises + props.parts.parts[1].exercises + props.parts.parts[2].exercises} </p>
+    <p>
+      <strong>
+        total of {sum} exercises
+      </strong>
+    </p>
   );
 };
 
@@ -57,6 +68,11 @@ const App = () => {
         name:'State of a component',
         exercises: 14,
         id: 3,
+      },
+      {
+        name:'React',
+        exercises: 11,
+        id: 4,
       },
     ],
   };
