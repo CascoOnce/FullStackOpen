@@ -7,23 +7,43 @@ const App = () => {
   const [newName, setNewName] = useState('')
 
   const handleNameChange = (event) => {
-    console.log(event.target.value);
-    setNewName(event.target.value);
+    console.log(event.target.value); // Muestra en consola el valor del input
+    setNewName(event.target.value); // Setea el valor del input
   };
 
   const addName = (event) => {
-    event.preventDefault();
-    const newPersons = {
+    event.preventDefault(); // Evitar que se recargue la pagina
+    // Nueva persona que se agrega
+    const newPerson = {
       name: newName,
     };
-    console.log('button clicked');
-    setPersons(persons.concat(newPersons));
-    setNewName('');
+    // existInList(1, persons);
+    if(!isInList(newPerson, persons)){
+      console.log('button clicked'); // Informar en consola
+      setPersons(persons.concat(newPerson)); // Se agrega al arreglo
+      setNewName(''); // Para que el input empiece de nuevo
+    }else{
+      // PLANILLA DE CADENAS
+      alert(`${newPerson.name} is already added to phonebook`);
+    }
+    
   }
 
   const listNames = persons.map(name => 
     <div>{name.name}</div>
   )
+
+  // const isInList = (value, list) => {
+  //   const values = list.filter((element) => {
+  //     return element.name == value.name;
+  //   })
+  //   if(values.length > 0) return true;
+  //   else return false;
+  // }
+
+  const isInList = (value, list) => list.some(element =>
+    element.name === value.name
+  );
 
   return (
     <div>
