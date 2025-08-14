@@ -1,5 +1,41 @@
 import { useState } from 'react'
 
+const Filter = ({value, change}) => {
+  return (
+    <div>
+      filter show with <input value={value} onChange={change} />
+    </div>
+  );
+}
+
+const PersonForm = (props) => {
+  return (
+    <div>
+      <form>
+        <div>
+          name: <input value={props.name} onChange={props.changeName} />
+        </div>
+        <div>
+          number: <input value={props.number} onChange={props.changeNumber} />
+        </div>
+        <div>
+          <button type="submit" onClick={props.add} >
+            add
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+const Persons = ({list}) => {
+  return (
+    <div>
+      {list}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -55,30 +91,18 @@ const App = () => {
   const isInList = (value, list) => list.some(element =>
     element.name === value.name
   );
-  
 
   return (
     <div>
       <h2>Phonebook</h2>
-        <div>
-          filter show with <input value={filterPerson} onChange={handleFilterChange} />
-        </div>
-      <h2>add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit" onClick={addNumbers} >
-            add
-          </button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {listNames}
+      <Filter value={filterPerson} change={handleFilterChange} />
+      <h3>add a new</h3>
+      <PersonForm 
+        name={newName} changeName={handleNameChange}
+        number={newNumber} changeNumber={handleNumberChange}
+        add={addNumbers} />
+      <h3>Numbers</h3>
+      <Persons list={listNames} />
     </div>
   )
 }
