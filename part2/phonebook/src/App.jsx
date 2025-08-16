@@ -43,7 +43,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [filterPerson, setFilterPerson] = useState('');
 
-  // SERVER CALL
+  // SERVER CALLS
+  // GET
   useEffect(() => {
     console.log('effect');
     axios
@@ -54,6 +55,10 @@ const App = () => {
         setPersons(response.data);
       })
   }, []);
+  // POST
+  
+  // PUT
+  
   console.log('render', persons.length, 'notes');
 
   // INPUT
@@ -76,15 +81,22 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      // id: persons.length + 1,
     };
     if(isInList(newPerson, persons)){
       alert(`${newPerson.name} is already added to phonebook`); // PLANILLA DE CADENAS
     }else{
       console.log('button clicked'); // Informar en consola
-      setPersons(persons.concat(newPerson)); // Se agrega al arreglo
-      setNewName(''); // Para que el input empiece de nuevo
-      setNewNumber(''); // Para que el input empiece de nuevo
+      // Se agrega al json
+      axios
+        .post('http://localhost:3000/persons', newPerson)
+        .then(response => {
+          console.log('add person');
+          console.log(response.data);
+          setPersons(persons.concat(response.data)); // Se agrega al arreglo
+          setNewName(''); // Para que el input empiece de nuevo
+          setNewNumber(''); // Para que el input empiece de nuevo
+        });
     }
   }
   // LIST
@@ -116,4 +128,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
