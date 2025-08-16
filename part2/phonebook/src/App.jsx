@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import contactService from "./services/contact";
 
 const Filter = ({value, change}) => {
   return (
@@ -7,7 +7,7 @@ const Filter = ({value, change}) => {
       filter show with <input value={value} onChange={change} />
     </div>
   );
-}
+};
 
 const PersonForm = (props) => {
   return (
@@ -46,20 +46,38 @@ const App = () => {
   // SERVER CALLS
   // GET
   useEffect(() => {
-    console.log('effect');
-    axios
-      .get('http://localhost:3000/persons')
-      .then(response => {
-        console.log('promise fulfilled');
-        console.log(response.data);
-        setPersons(response.data);
-      })
+    contactService
+      .getAll()
+      .then(initialContacts => {
+        setPersons(initialContacts);
+      });
   }, []);
-  // POST
-  
+  // POST - BOTON
+  const addNumbers = (event) => {
+    event.preventDefault(); // Evitar que se recargue la pagina
+    // Nueva persona que se agrega
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+      // id: persons.length + 1,
+    };
+    if(isInList(newPerson, persons)){
+      alert(`${newPerson.name} is already added to phonebook`); // PLANILLA DE CADENAS
+    }else{
+      console.log('button clicked'); // Informar en consola
+      // Se agrega al json
+      contactService
+        .create(newPerson)
+        .then(initialContacts => {
+          setPersons(persons.concat(initialContacts)); // Se agrega al arreglo
+          setNewName(''); // Para que el input empiece de nuevo
+          setNewNumber(''); // Para que el input empiece de nuevo
+        });
+    };
+  };
   // PUT
   
-  console.log('render', persons.length, 'notes');
+  // console.log('render', persons.length, 'notes');
 
   // INPUT
   const handleNameChange = (event) => {
@@ -74,31 +92,7 @@ const App = () => {
     console.log(event.target.value); // Muestra en consola el valor del input
     setFilterPerson(event.target.value); // Setea el valor del input
   };
-  // BOTON
-  const addNumbers = (event) => {
-    event.preventDefault(); // Evitar que se recargue la pagina
-    // Nueva persona que se agrega
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-      // id: persons.length + 1,
-    };
-    if(isInList(newPerson, persons)){
-      alert(`${newPerson.name} is already added to phonebook`); // PLANILLA DE CADENAS
-    }else{
-      console.log('button clicked'); // Informar en consola
-      // Se agrega al json
-      axios
-        .post('http://localhost:3000/persons', newPerson)
-        .then(response => {
-          console.log('add person');
-          console.log(response.data);
-          setPersons(persons.concat(response.data)); // Se agrega al arreglo
-          setNewName(''); // Para que el input empiece de nuevo
-          setNewNumber(''); // Para que el input empiece de nuevo
-        });
-    }
-  }
+  
   // LIST
   const phonesToShsow = persons.filter(element => {
     const lower = element.name.toLowerCase();
