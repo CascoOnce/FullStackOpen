@@ -75,10 +75,19 @@ const App = () => {
         });
     };
   };
-  // PUT
+  // DELETE - BOTON
+  const deleteNumber = (name, event) => {
+    event.preventDefault();
+    if(window.confirm(`Delete ${name.name}`)){
+      console.log('Bailalo');
+      contactService
+        .remove(name.id)
+        .then(initialContacts => {
+          setPersons(persons.filter(p => p.id !== name.id))
+        })
+    }
+  }
   
-  // console.log('render', persons.length, 'notes');
-
   // INPUT
   const handleNameChange = (event) => {
     console.log(event.target.value); // Muestra en consola el valor del input
@@ -92,16 +101,18 @@ const App = () => {
     console.log(event.target.value); // Muestra en consola el valor del input
     setFilterPerson(event.target.value); // Setea el valor del input
   };
-  
-  // LIST
+  // FILTRO DE CONTACTOS
   const phonesToShsow = persons.filter(element => {
     const lower = element.name.toLowerCase();
-    // console.log(lower);
     return lower.includes(filterPerson.toLowerCase());
   })
+  // LISTA DE CONTACTOS
   const listNames = phonesToShsow.map(name => 
-    <div key={name.id} >{name.name} {name.number}</div>
-  )
+    <div key={name.id} >
+      {name.name} {name.number} <button onClick={(e) => deleteNumber(name, e)} >delete</button>
+    </div>
+    
+  );
   // VALIDACION REPETIDO
   const isInList = (value, list) => list.some(element =>
     element.name === value.name
