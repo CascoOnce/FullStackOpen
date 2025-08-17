@@ -52,7 +52,7 @@ const App = () => {
         setPersons(initialContacts);
       });
   }, []);
-  // POST - BOTON
+  // POST or REPLACE - BOTON
   const addNumbers = (event) => {
     event.preventDefault(); // Evitar que se recargue la pagina
     // Nueva persona que se agrega
@@ -61,24 +61,30 @@ const App = () => {
       number: newNumber,
       // id: persons.length + 1,
     };
-    if(isInList(newPerson, persons)){
-      alert(`${newPerson.name} is already added to phonebook`); // PLANILLA DE CADENAS
-    }else{
-      console.log('button clicked'); // Informar en consola
-      // Se agrega al json
+    if(isInList(newPerson, persons)){ // REPLACE
+      if(confirm(`${newPerson.name} is already added to phonebook, replace the old number with a new one`)){
+        const contact = persons.find(p => p.name === newName);
+        const id = contact.id;
+        contactService
+          .update(id, newPerson)
+          .then(initialContacts => {
+            setPersons(persons.map(p => p.id !== id ? p: initialContacts)); // Se agrega al arreglo
+          })
+      }
+    }else{ // POST
       contactService
         .create(newPerson)
         .then(initialContacts => {
           setPersons(persons.concat(initialContacts)); // Se agrega al arreglo
-          setNewName(''); // Para que el input empiece de nuevo
-          setNewNumber(''); // Para que el input empiece de nuevo
         });
     };
+    setNewName(''); // Para que el input empiece de nuevo
+    setNewNumber(''); // Para que el input empiece de nuevo
   };
   // DELETE - BOTON
   const deleteNumber = (name, event) => {
     event.preventDefault();
-    if(window.confirm(`Delete ${name.name}`)){
+    if(confirm(`Delete ${name.name}`)){
       console.log('Bailalo');
       contactService
         .remove(name.id)
@@ -86,7 +92,7 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== name.id))
         })
     }
-  }
+  };
   
   // INPUT
   const handleNameChange = (event) => {
@@ -105,7 +111,7 @@ const App = () => {
   const phonesToShsow = persons.filter(element => {
     const lower = element.name.toLowerCase();
     return lower.includes(filterPerson.toLowerCase());
-  })
+  });
   // LISTA DE CONTACTOS
   const listNames = phonesToShsow.map(name => 
     <div key={name.id} >
@@ -130,7 +136,7 @@ const App = () => {
       <h3>Numbers</h3>
       <Persons list={listNames} />
     </div>
-  )
-}
+  );
+};
 
 export default App;
