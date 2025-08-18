@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import contactService from "./services/contact";
+import Notification from './components/Notification';
 
 const Filter = ({value, change}) => {
   return (
@@ -42,6 +43,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterPerson, setFilterPerson] = useState('');
+  const [message, setMessage] = useState(null);
+  const [status, setStatus] = useState("success");
 
   // SERVER CALLS
   // GET
@@ -70,11 +73,24 @@ const App = () => {
           .then(initialContacts => {
             setPersons(persons.map(p => p.id !== id ? p: initialContacts)); // Se agrega al arreglo
           })
+          .catch(error => {
+            setStatus("error");
+            setMessage(`Information of ${newPerson.name} has already been removed from server`);
+            setTimeout(() => {
+              setMessage(null);
+            },3000);
+            setPersons(persons.filter(n => n.id !== id));
+          })
       }
     }else{ // POST
       contactService
         .create(newPerson)
         .then(initialContacts => {
+          setStatus("success");
+          setMessage(`Added ${initialContacts.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
           setPersons(persons.concat(initialContacts)); // Se agrega al arreglo
         });
     };
@@ -127,6 +143,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} type={status} />
       <Filter value={filterPerson} change={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm 
