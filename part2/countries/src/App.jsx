@@ -16,7 +16,7 @@ const App = () => {
 
   const handleFilterChange = (event) => setFilter(event.target.value);
 
-  var countriesToShow = null;
+  let countriesToShow = null;
   if(countries !== null){
     countriesToShow = countries.filter(element => {
       const lower = element.name.common.toLowerCase();

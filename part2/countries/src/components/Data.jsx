@@ -17,9 +17,9 @@ const Country = ({data}) => {
       .then(response => {
         setWeather(response.data);
       })
-  }, []);
+  }, [data]);
 
-  if(weather === null){
+  if(weather === null || weather.current.temp === null){
     return (
       <div>
         <h1>{data.name.common}</h1>
