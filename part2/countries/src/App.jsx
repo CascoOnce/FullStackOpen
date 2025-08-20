@@ -29,7 +29,7 @@ const App = () => {
       <div>
         find countries <input type="text" value={filter} onChange={handleFilterChange} />
       </div>
-      <Data countriesToShow={countriesToShow} />
+      <Data countriesToShow={countriesToShow} setFilter={setFilter} />
     </div>
   );
 };

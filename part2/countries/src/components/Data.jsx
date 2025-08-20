@@ -17,22 +17,25 @@ const Country = ({data}) => {
   );
 }
 
-const Data = ({countriesToShow}) => {
+const Data = ({countriesToShow, setFilter}) => {
   if(countriesToShow === null){
     return (
-      <div>Too many matches, specify another filter</div>
+      <div>Too many matches, specify another filter.</div>
     );
   }else{
     const num = countriesToShow.length;
     if (num > 10) {
       return (
-        <div>Too many matches, specify another filter</div>
+        <div>Too many matches, specify another filter.</div>
       );
     } else if (num > 1) {
       return (
         <>
           {countriesToShow.map(name => 
-            <div key={name.cca2} >{name.name.common} </div>
+            <div key={name.cca2} >
+              {name.name.common} 
+              <button onClick={() => setFilter(name.name.common)} >Show</button>
+            </div>
           )}
         </>
       )
